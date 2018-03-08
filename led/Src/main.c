@@ -40,7 +40,7 @@
 #include "stm32l4xx_hal.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "stm32l475e_iot01.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -119,7 +119,7 @@ int main(void)
   MX_USART3_UART_Init();
   MX_USB_OTG_FS_PCD_Init();
   /* USER CODE BEGIN 2 */
-
+  BSP_LED_Init(LED2);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -128,7 +128,8 @@ int main(void)
   {
 
   /* USER CODE END WHILE */
-
+	  BSP_LED_Toggle(LED2);
+	  HAL_Delay(1000);
   /* USER CODE BEGIN 3 */
 
   }
