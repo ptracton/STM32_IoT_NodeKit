@@ -52,7 +52,7 @@ UART_HandleTypeDef huart1;
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 static uint8_t echo_char;
-static uint8_t echo;
+static volatile uint8_t echo;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -85,7 +85,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	static uint32_t count = 0;
 	echo = 0;
 	echo_char = 0;
   /* USER CODE END 1 */
@@ -117,8 +116,7 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   HAL_UART_Receive_IT(&huart1, &echo_char, 1);
-  echo_char = 'a';
-  HAL_UART_Transmit_IT(&huart1, &echo_char, 1);
+
   while (1)
   {
 
