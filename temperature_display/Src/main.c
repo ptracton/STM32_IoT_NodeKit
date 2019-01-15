@@ -51,7 +51,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "app_mems-library.h"
-
+#include <stdio.h>
+#include <stdlib.h>
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -104,7 +105,7 @@ static void MX_TIM6_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+	uint32_t count;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -127,10 +128,11 @@ int main(void)
   MX_GPIO_Init();
   MX_USART1_UART_Init();
   MX_USART3_UART_Init();
-  MX_TIM6_Init();
-  MX_X_CUBE_MEMS1_Init();
+//  MX_TIM6_Init();
+//  MX_X_CUBE_MEMS1_Init();
   /* USER CODE BEGIN 2 */
-
+  printf("Booting Up STM32L4\r\n");
+  count = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -138,8 +140,8 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
-  MX_X_CUBE_MEMS1_Process();
+	  printf("Booting Up STM32L4 %lu\r\n", count++);
+  // MX_X_CUBE_MEMS1_Process();
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -228,9 +230,9 @@ static void MX_TIM6_Init(void)
 
   /* USER CODE END TIM6_Init 1 */
   htim6.Instance = TIM6;
-  htim6.Init.Prescaler = 0;
+  htim6.Init.Prescaler = 80;
   htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim6.Init.Period = 0;
+  htim6.Init.Period = 10000;
   htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
   {
