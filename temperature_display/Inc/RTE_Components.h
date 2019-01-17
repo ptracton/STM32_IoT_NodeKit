@@ -36,6 +36,7 @@
 #define  __RTE_COMPONENTS_H__ 
 
 /* Defines ------------------------------------------------------------------*/
-#define HTS221_HUMTEMP_I2C 
+#define HTS221_HUMTEMP_I2C
+#define BSP_ENV_SENSORS 
  
 #endif /* __RTE_COMPONENTS_H__ */

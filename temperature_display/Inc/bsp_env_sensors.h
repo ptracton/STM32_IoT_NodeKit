@@ -1,11 +1,14 @@
-/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file    stm32l4xx_it.h
-  * @brief   This file contains the headers of the interrupt handlers.
+  * @file    bsp_env_sensors.h
+  * @author  MEMS Application Team
+  * @version V0.0.1
+  * @date    29-January-2018
+  * @brief   This file contains definitions for the BSP Motion Sensors interface
   ******************************************************************************
+  * @attention
   *
-  * COPYRIGHT(c) 2019 STMicroelectronics
+  * <h2><center>&copy; COPYRIGHT(c) 2019 STMicroelectronics</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -31,59 +34,74 @@
   *
   ******************************************************************************
   */
-/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32L4xx_IT_H
-#define __STM32L4xx_IT_H
+#ifndef __BSP_ENV_SENSORS_H__
+#define __BSP_ENV_SENSORS_H__
 
 #ifdef __cplusplus
- extern "C" {
-#endif 
+extern "C" {
+#endif
 
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
+/* Includes ------------------------------------------------------------------*/
 
-/* USER CODE END Includes */
+#include "mems_conf.h"
+#include "env_sensor.h"
 
-/* Exported types ------------------------------------------------------------*/
-/* USER CODE BEGIN ET */
+#ifndef USE_ENV_SENSOR_HTS221_0
+#define USE_ENV_SENSOR_HTS221_0          1
+#endif
 
-/* USER CODE END ET */
+#if (USE_ENV_SENSOR_HTS221_0 == 1)
+#include "hts221.h"
+#endif
 
-/* Exported constants --------------------------------------------------------*/
-/* USER CODE BEGIN EC */
+#if (USE_ENV_SENSOR_HTS221_0 == 1)
+#define HTS221_0 (0)
+#endif
 
-/* USER CODE END EC */
+/* Environmental Sensor instance Info */
+typedef struct
+{
+  uint8_t Temperature;
+  uint8_t Pressure;
+  uint8_t Humidity;
+  uint8_t LowPower;
+  float   HumMaxOdr;
+  float   TempMaxOdr;
+  float   PressMaxOdr;
+} ENV_SENSOR_Capabilities_t;
 
-/* Exported macro ------------------------------------------------------------*/
-/* USER CODE BEGIN EM */
+typedef struct
+{
+  uint32_t Functions;
+} ENV_SENSOR_Ctx_t;
 
-/* USER CODE END EM */
+#define ENV_TEMPERATURE      1U
+#define ENV_PRESSURE         2U
+#define ENV_HUMIDITY         4U
 
-/* Exported functions prototypes ---------------------------------------------*/
-void NMI_Handler(void);
-void HardFault_Handler(void);
-void MemManage_Handler(void);
-void BusFault_Handler(void);
-void UsageFault_Handler(void);
-void SVC_Handler(void);
-void DebugMon_Handler(void);
-void PendSV_Handler(void);
-void SysTick_Handler(void);
-void EXTI9_5_IRQHandler(void);
-void TIM1_UP_TIM16_IRQHandler(void);
-void I2C2_EV_IRQHandler(void);
-void EXTI15_10_IRQHandler(void);
-void TIM6_DAC_IRQHandler(void);
-/* USER CODE BEGIN EFP */
+#define ENV_FUNCTIONS_NBR    3U
+#define ENV_INSTANCES_NBR    (USE_ENV_SENSOR_HTS221_0)
 
-/* USER CODE END EFP */
+#if (ENV_INSTANCES_NBR == 0)
+#error "No environmental sensor instance has been selected"
+#endif
+
+int32_t BSP_ENV_SENSOR_Init(uint32_t Instance, uint32_t Functions);
+int32_t BSP_ENV_SENSOR_DeInit(uint32_t Instance);
+int32_t BSP_ENV_SENSOR_GetCapabilities(uint32_t Instance, ENV_SENSOR_Capabilities_t *Capabilities);
+int32_t BSP_ENV_SENSOR_ReadID(uint32_t Instance, uint8_t *Id);
+int32_t BSP_ENV_SENSOR_Enable(uint32_t Instance, uint32_t Function);
+int32_t BSP_ENV_SENSOR_Disable(uint32_t Instance, uint32_t Function);
+int32_t BSP_ENV_SENSOR_GetOutputDataRate(uint32_t Instance, uint32_t Function, float *Odr);
+int32_t BSP_ENV_SENSOR_SetOutputDataRate(uint32_t Instance, uint32_t Function, float Odr);
+int32_t BSP_ENV_SENSOR_GetValue(uint32_t Instance, uint32_t Function, float *Value);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __STM32L4xx_IT_H */
+#endif /* __BSP_ENV_SENSORS_H__ */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

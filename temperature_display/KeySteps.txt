@@ -1,2 +1,18 @@
 Move syscalls.c into the Src directory
 Make sure to build for STM32L475VG
+Put:
+#define INTERNAL_I2C2_SCL_Pin GPIO_PIN_10
+#define INTERNAL_I2C2_SDA_Pin GPIO_PIN_11
+in B_L475E_IOT01A_BUS.H
+Enable Timer6 interrupt
+Custom BSP Drivers
+
+Thanks to you all,
+
+ 
+
+I could print float value by adding '-u _printf_float' as you said.
+
+ 
+
+following captureis project property , add it like this at Settings -> C- Linker -> Command: arm-atolic-eabi-gcc -u _printf_float

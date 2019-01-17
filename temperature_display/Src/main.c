@@ -51,11 +51,11 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "app_mems-library.h"
-#include <stdio.h>
-#include <stdlib.h>
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "bsp_env_sensors.h"
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -80,7 +80,6 @@ UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN PV */
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -95,6 +94,8 @@ static void MX_TIM6_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+uint32_t toggle_count;
+uint32_t get_temperature;
 
 /* USER CODE END 0 */
 
@@ -105,7 +106,9 @@ static void MX_TIM6_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	uint32_t count;
+	int32_t returnCode;
+	toggle_count = 0;
+	get_temperature = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -128,11 +131,14 @@ int main(void)
   MX_GPIO_Init();
   MX_USART1_UART_Init();
   MX_USART3_UART_Init();
-//  MX_TIM6_Init();
-//  MX_X_CUBE_MEMS1_Init();
+  MX_TIM6_Init();
+  MX_X_CUBE_MEMS1_Init();
   /* USER CODE BEGIN 2 */
   printf("Booting Up STM32L4\r\n");
-  count = 0;
+
+
+  BSP_ENV_SENSOR_Init(HTS221_0, ENV_TEMPERATURE);
+  HAL_TIM_Base_Start_IT(&htim6);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -140,9 +146,19 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  printf("Booting Up STM32L4 %lu\r\n", count++);
-  // MX_X_CUBE_MEMS1_Process();
+
+  MX_X_CUBE_MEMS1_Process();
     /* USER CODE BEGIN 3 */
+  if (get_temperature){
+	  float temperature;
+	  get_temperature =0;
+	  returnCode = BSP_ENV_SENSOR_GetValue(HTS221_0, ENV_TEMPERATURE, &temperature);
+	  if ( BSP_ERROR_NONE == returnCode){
+		  printf("TEMPERATURE = %f      \r\n", temperature);
+	  }
+  }
+
+
   }
   /* USER CODE END 3 */
 }
@@ -233,7 +249,7 @@ static void MX_TIM6_Init(void)
   htim6.Init.Prescaler = 80;
   htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim6.Init.Period = 10000;
-  htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
   {
     Error_Handler();
@@ -559,7 +575,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     HAL_IncTick();
   }
   /* USER CODE BEGIN Callback 1 */
+  if (htim->Instance == TIM6){
+	toggle_count ++;
 
+	if (toggle_count >= 100){
+		get_temperature = 1;
+		toggle_count = 0;
+	}
+  }
   /* USER CODE END Callback 1 */
 }
 
