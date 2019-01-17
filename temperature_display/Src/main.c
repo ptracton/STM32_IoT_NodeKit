@@ -137,7 +137,8 @@ int main(void)
   printf("Booting Up STM32L4\r\n");
 
 
-  BSP_ENV_SENSOR_Init(HTS221_0, ENV_TEMPERATURE);
+  BSP_ENV_SENSOR_Init(HTS221_0, ENV_TEMPERATURE | ENV_HUMIDITY);
+
   HAL_TIM_Base_Start_IT(&htim6);
   /* USER CODE END 2 */
 
@@ -151,10 +152,15 @@ int main(void)
     /* USER CODE BEGIN 3 */
   if (get_temperature){
 	  float temperature;
+	  float humidity;
 	  get_temperature =0;
 	  returnCode = BSP_ENV_SENSOR_GetValue(HTS221_0, ENV_TEMPERATURE, &temperature);
 	  if ( BSP_ERROR_NONE == returnCode){
 		  printf("TEMPERATURE = %f      \r\n", temperature);
+	  }
+	  returnCode = BSP_ENV_SENSOR_GetValue(HTS221_0, ENV_HUMIDITY, &humidity);
+	  if ( BSP_ERROR_NONE == returnCode){
+		  printf("HUMIDITY = %f      \r\n", humidity);
 	  }
   }
 
