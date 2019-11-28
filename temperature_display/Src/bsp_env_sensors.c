@@ -368,6 +368,7 @@ int32_t BSP_ENV_SENSOR_SetOutputDataRate(uint32_t Instance, uint32_t Function, f
 int32_t BSP_ENV_SENSOR_GetValue(uint32_t Instance, uint32_t Function, float *Value)
 {
   int32_t ret;
+  int32_t valid;
 
   if (Instance >= ENV_INSTANCES_NBR)
   {
@@ -377,7 +378,8 @@ int32_t BSP_ENV_SENSOR_GetValue(uint32_t Instance, uint32_t Function, float *Val
   {
     if ((EnvCtx[Instance].Functions & Function) == Function)
     {
-      if (EnvFuncDrv[Instance][FunctionIndex[Function]]->GetValue(EnvCompObj[Instance], Value) != BSP_ERROR_NONE)
+      valid =EnvFuncDrv[Instance][FunctionIndex[Function]]->GetValue(EnvCompObj[Instance], Value) ;
+      if (valid != BSP_ERROR_NONE)
       {
         ret = BSP_ERROR_COMPONENT_FAILURE;
       }
