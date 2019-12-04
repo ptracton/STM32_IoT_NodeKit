@@ -106,7 +106,6 @@ static uint32_t DFSDM1_Init = 0;
 */
 void HAL_DFSDM_ChannelMspInit(DFSDM_Channel_HandleTypeDef* hdfsdm_channel)
 {
-
   GPIO_InitTypeDef GPIO_InitStruct = {0};
   if(DFSDM1_Init == 0)
   {
@@ -141,10 +140,8 @@ void HAL_DFSDM_ChannelMspInit(DFSDM_Channel_HandleTypeDef* hdfsdm_channel)
 * @param hdfsdm_channel: DFSDM_Channel handle pointer
 * @retval None
 */
-
 void HAL_DFSDM_ChannelMspDeInit(DFSDM_Channel_HandleTypeDef* hdfsdm_channel)
 {
-
   DFSDM1_Init-- ;
   if(DFSDM1_Init == 0)
     {
@@ -175,7 +172,6 @@ void HAL_DFSDM_ChannelMspDeInit(DFSDM_Channel_HandleTypeDef* hdfsdm_channel)
 */
 void HAL_UART_MspInit(UART_HandleTypeDef* huart)
 {
-
   GPIO_InitTypeDef GPIO_InitStruct = {0};
   if(huart->Instance==USART1)
   {
@@ -213,10 +209,8 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
 * @param huart: UART handle pointer
 * @retval None
 */
-
 void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
 {
-
   if(huart->Instance==USART1)
   {
   /* USER CODE BEGIN USART1_MspDeInit 0 */
