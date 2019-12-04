@@ -24,6 +24,10 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
+#include "scheduler.h"
+#include "task1.h"
+#include "task2.h"
+#include "task3.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -98,10 +102,16 @@ int main(void)
   /* USER CODE BEGIN 2 */
   LL_USART_RequestTxDataFlush(USART1);
   printf("\r\nBasic Scheduler Booting....\n\r");
+  Scheduler_Init();
+  Task1_Init();
+  Task2_Init();
+  Task3_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  Scheduler_SetTask(TASK1_SCHEDULE);
+  Scheduler_Start();
   while (1)
   {
 
